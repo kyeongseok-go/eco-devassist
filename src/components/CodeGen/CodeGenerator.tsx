@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Play, Code2, Loader2, AlertTriangle } from 'lucide-react';
 import type { ECO, AnalysisResult, Action } from '../../types';
-import { callClaude, parseJsonResponse, hasApiKey } from '../../services/claudeApi';
+import { callClaude, hasApiKey } from '../../services/claudeApi';
 import { buildCodePrompt } from '../../services/promptTemplates';
 import { swModules, getModuleById } from '../../data/mockSWModules';
 
@@ -19,6 +19,33 @@ interface CodeResult {
   changes: { line: string; before: string; after: string; reason: string }[];
   safetyNotes: string[];
   summary: string;
+}
+
+function parseCodeResponse(response: string): CodeResult {
+  const codeMatch = response.match(/===MODIFIED_CODE_START===([\s\S]*?)===MODIFIED_CODE_END===/);
+  const metaMatch = response.match(/===META_START===([\s\S]*?)===META_END===/);
+
+  const modifiedCode = codeMatch ? codeMatch[1].trim() : '';
+  let changes: CodeResult['changes'] = [];
+  let safetyNotes: string[] = [];
+  let summary = '';
+
+  if (metaMatch) {
+    try {
+      const meta = JSON.parse(metaMatch[1].trim());
+      changes = meta.changes || [];
+      safetyNotes = meta.safetyNotes || [];
+      summary = meta.summary || '';
+    } catch {
+      summary = '메타데이터 파싱 실패 — 코드는 정상 생성되었습니다.';
+    }
+  }
+
+  if (!modifiedCode) {
+    throw new Error('AI 응답에서 수정된 코드를 추출할 수 없습니다.');
+  }
+
+  return { modifiedCode, changes, safetyNotes, summary };
 }
 
 export function CodeGenerator({ selectedECO, analysisResult, generatedCode, isLoading, selectedModuleId, dispatch }: CodeGeneratorProps) {
@@ -42,7 +69,7 @@ export function CodeGenerator({ selectedECO, analysisResult, generatedCode, isLo
         .filter((m): m is NonNullable<typeof m> => m !== undefined);
       const prompt = buildCodePrompt(selectedECO, module, relatedModules);
       const response = await callClaude(prompt);
-      const result = parseJsonResponse<CodeResult>(response);
+      const result = parseCodeResponse(response);
       setCodeResult(result);
       dispatch({ type: 'SET_CODE', payload: result.modifiedCode });
     } catch (e) {

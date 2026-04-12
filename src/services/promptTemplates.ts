@@ -75,15 +75,21 @@ ${relatedModules.map(m => `// ${m.name} (${m.filePath})\n${m.codeSnippet}`).join
 3. 안전 관련 로직은 반드시 경계값 검사 포함
 4. Before/After 비교 설명
 
-다음 JSON 형식으로만 응답해주세요:
+반드시 아래 형식으로 응답해주세요. 코드와 메타데이터를 분리합니다.
+
+===MODIFIED_CODE_START===
+(수정된 전체 코드를 여기에 작성)
+===MODIFIED_CODE_END===
+
+===META_START===
 {
-  "modifiedCode": "수정된 전체 코드",
   "changes": [
     { "line": "변경된 라인 설명", "before": "변경 전", "after": "변경 후", "reason": "변경 사유" }
   ],
   "safetyNotes": ["안전 관련 주의사항"],
   "summary": "변경 요약 설명"
-}`;
+}
+===META_END===`;
 }
 
 export function buildTestPrompt(
