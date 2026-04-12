@@ -1,10 +1,14 @@
 const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages';
 
-let apiKey = localStorage.getItem('claude_api_key') || '';
+function safeStorage() {
+  try { return typeof localStorage !== 'undefined' && typeof localStorage.getItem === 'function' ? localStorage : null; } catch { return null; }
+}
+
+let apiKey = safeStorage()?.getItem('claude_api_key') || '';
 
 export function setApiKey(key: string): void {
   apiKey = key;
-  localStorage.setItem('claude_api_key', key);
+  safeStorage()?.setItem('claude_api_key', key);
 }
 
 export function getApiKey(): string {
