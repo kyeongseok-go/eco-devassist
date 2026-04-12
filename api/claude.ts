@@ -32,9 +32,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: { message: response.statusText } }));
+    const errBody = await response.json().catch(() => ({ error: { message: response.statusText } })) as { error?: { message?: string } };
     return res.status(response.status).json({
-      error: `Claude API 오류: ${error.error?.message || response.statusText}`,
+      error: `Claude API 오류: ${errBody.error?.message || response.statusText}`,
     });
   }
 
