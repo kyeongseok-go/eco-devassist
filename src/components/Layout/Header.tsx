@@ -1,10 +1,11 @@
 import { Shield, Settings, Key } from 'lucide-react';
 import { useState } from 'react';
-import { setApiKey, getApiKey, hasApiKey } from '../../services/claudeApi';
+import { setApiKey, getApiKey, hasApiKey, isProduction } from '../../services/claudeApi';
 
 export function Header() {
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [keyInput, setKeyInput] = useState(getApiKey());
+  const [keySet, setKeySet] = useState(hasApiKey());
 
   return (
     <>
@@ -17,17 +18,26 @@ export function Header() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-medium ${hasApiKey() ? 'bg-accent-green/10 text-accent-green' : 'bg-status-critical/10 text-status-critical'}`}>
-            <div className={`w-1.5 h-1.5 rounded-full ${hasApiKey() ? 'bg-accent-green' : 'bg-status-critical'}`} />
-            {hasApiKey() ? 'AI 연결됨' : 'API 키 필요'}
-          </div>
-          <button
-            onClick={() => setShowKeyModal(true)}
-            className="p-2 rounded hover:bg-navy-800 text-navy-500 hover:text-white transition-colors"
-            title="API 키 설정"
-          >
-            <Key className="w-4 h-4" />
-          </button>
+          {isProduction ? (
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded text-xs font-medium bg-accent-green/10 text-accent-green">
+              <div className="w-1.5 h-1.5 rounded-full bg-accent-green" />
+              AI 연결됨
+            </div>
+          ) : (
+            <>
+              <div className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-medium ${keySet ? 'bg-accent-green/10 text-accent-green' : 'bg-status-critical/10 text-status-critical'}`}>
+                <div className={`w-1.5 h-1.5 rounded-full ${keySet ? 'bg-accent-green' : 'bg-status-critical'}`} />
+                {keySet ? 'AI 연결됨' : 'API 키 필요'}
+              </div>
+              <button
+                onClick={() => setShowKeyModal(true)}
+                className="p-2 rounded hover:bg-navy-800 text-navy-500 hover:text-white transition-colors"
+                title="API 키 설정"
+              >
+                <Key className="w-4 h-4" />
+              </button>
+            </>
+          )}
           <button className="p-2 rounded hover:bg-navy-800 text-navy-500 hover:text-white transition-colors">
             <Settings className="w-4 h-4" />
           </button>
@@ -54,7 +64,7 @@ export function Header() {
                 취소
               </button>
               <button
-                onClick={() => { setApiKey(keyInput); setShowKeyModal(false); }}
+                onClick={() => { setApiKey(keyInput); setKeySet(true); setShowKeyModal(false); }}
                 className="px-4 py-2 text-sm bg-accent-green text-navy-950 font-medium rounded hover:bg-accent-green-dim transition-colors"
               >
                 저장

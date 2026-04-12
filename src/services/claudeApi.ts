@@ -1,4 +1,4 @@
-const isProduction = typeof window !== 'undefined' && !window.location.hostname.includes('localhost');
+export const isProduction = typeof window !== 'undefined' && !window.location.hostname.includes('localhost');
 const PROXY_URL = '/api/claude';
 const DIRECT_URL = 'https://api.anthropic.com/v1/messages';
 
