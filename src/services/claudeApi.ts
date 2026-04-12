@@ -60,7 +60,7 @@ async function callDirect(prompt: string): Promise<string> {
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 4096,
+      max_tokens: 8192,
       messages: [{ role: 'user', content: prompt }],
     }),
   });
@@ -75,9 +75,31 @@ async function callDirect(prompt: string): Promise<string> {
 }
 
 export function parseJsonResponse<T>(response: string): T {
-  const jsonMatch = response.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) {
+  // 코드블록 안의 JSON 우선 추출
+  const codeBlockMatch = response.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
+  if (codeBlockMatch) {
+    return JSON.parse(codeBlockMatch[1].trim());
+  }
+
+  // 중괄호 깊이를 추적해서 최외곽 JSON 객체를 정확히 추출
+  const start = response.indexOf('{');
+  if (start === -1) {
     throw new Error('응답에서 JSON을 찾을 수 없습니다.');
   }
-  return JSON.parse(jsonMatch[0]);
+
+  let depth = 0;
+  let inString = false;
+  let escape = false;
+
+  for (let i = start; i < response.length; i++) {
+    const ch = response[i];
+    if (escape) { escape = false; continue; }
+    if (ch === '\\') { escape = true; continue; }
+    if (ch === '"') { inString = !inString; continue; }
+    if (inString) continue;
+    if (ch === '{') depth++;
+    if (ch === '}') { depth--; if (depth === 0) return JSON.parse(response.slice(start, i + 1)); }
+  }
+
+  throw new Error('응답에서 완전한 JSON을 찾을 수 없습니다.');
 }

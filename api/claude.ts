@@ -12,7 +12,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: 'ANTHROPIC_API_KEY가 설정되지 않았습니다.' });
   }
 
-  const { prompt } = req.body;
+  const { prompt, maxTokens } = req.body;
   if (!prompt || typeof prompt !== 'string') {
     return res.status(400).json({ error: 'prompt 필드가 필요합니다.' });
   }
@@ -26,7 +26,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 4096,
+      max_tokens: typeof maxTokens === 'number' ? maxTokens : 8192,
       messages: [{ role: 'user', content: prompt }],
     }),
   });
