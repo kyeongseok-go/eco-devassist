@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Plus, AlertTriangle, Clock, CheckCircle2, FileEdit, Eye, History, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, AlertTriangle, Clock, CheckCircle2, FileEdit, Eye, History, ChevronDown, ChevronUp, GitCompareArrows } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import type { ECO, ECOStatus, ECOPriority, Action, TabType } from '../../types';
 import { ECOCreateModal } from './ECOCreateModal';
 import { ECOTimeline } from './ECOTimeline';
+import { BOMCompare } from './BOMCompare';
 import { swModules } from '../../data/mockSWModules';
 
 const statusConfig: Record<ECOStatus, { label: string; color: string; bg: string; hex: string }> = {
@@ -30,6 +31,7 @@ interface ECODashboardProps {
 export function ECODashboard({ ecos, selectedECO, dispatch }: ECODashboardProps) {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
+  const [showBOMCompare, setShowBOMCompare] = useState(false);
 
   const stats = {
     total: ecos.length,
@@ -201,21 +203,45 @@ export function ECODashboard({ ecos, selectedECO, dispatch }: ECODashboardProps)
         })}
       </div>
 
-      {/* Timeline Toggle */}
-      <div>
-        <button
-          onClick={() => setShowTimeline(!showTimeline)}
-          className="flex items-center gap-2 text-sm text-navy-500 hover:text-gray-300 transition-colors"
-        >
-          <History className="w-4 h-4" />
-          과거 ECO 변경 이력
-          {showTimeline ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-        </button>
-        {showTimeline && (
-          <div className="mt-3">
-            <ECOTimeline />
-          </div>
-        )}
+      {/* Collapsible Sections */}
+      <div className="space-y-3">
+        {/* BOM Compare */}
+        <div className="bg-navy-900 border border-navy-700 rounded-lg overflow-hidden">
+          <button
+            onClick={() => setShowBOMCompare(!showBOMCompare)}
+            className="flex items-center justify-between w-full px-4 py-3 text-sm text-navy-500 hover:text-gray-300 transition-colors"
+          >
+            <span className="flex items-center gap-2">
+              <GitCompareArrows className="w-4 h-4 text-accent-cyan" />
+              EBOM vs MBOM 정합성 비교
+            </span>
+            {showBOMCompare ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          </button>
+          {showBOMCompare && (
+            <div className="px-4 pb-4">
+              <BOMCompare />
+            </div>
+          )}
+        </div>
+
+        {/* Timeline */}
+        <div className="bg-navy-900 border border-navy-700 rounded-lg overflow-hidden">
+          <button
+            onClick={() => setShowTimeline(!showTimeline)}
+            className="flex items-center justify-between w-full px-4 py-3 text-sm text-navy-500 hover:text-gray-300 transition-colors"
+          >
+            <span className="flex items-center gap-2">
+              <History className="w-4 h-4" />
+              과거 ECO 변경 이력
+            </span>
+            {showTimeline ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          </button>
+          {showTimeline && (
+            <div className="px-4 pb-4">
+              <ECOTimeline />
+            </div>
+          )}
+        </div>
       </div>
 
       {showCreateModal && (

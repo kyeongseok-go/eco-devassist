@@ -12,6 +12,7 @@ import { ReportGenerator } from './components/Report/ReportGenerator';
 import { KnowledgeSearch } from './components/Knowledge/KnowledgeSearch';
 import { MisraCChecker } from './components/Compliance/MisraCChecker';
 import { ErrorBoundary } from './components/UI/ErrorBoundary';
+import { GuideTour } from './components/UI/GuideTour';
 import { useAppState } from './hooks/useAppState';
 import type { TabType } from './types';
 
@@ -19,13 +20,19 @@ function App() {
   const [state, dispatch] = useAppState();
   const [selectedBOMId, setSelectedBOMId] = useState<string | null>(null);
   const [showLanding, setShowLanding] = useState(true);
+  const [showGuide, setShowGuide] = useState(false);
+
+  const handleStartDemo = () => {
+    setShowLanding(false);
+    setShowGuide(true);
+  };
 
   const handleTabChange = (tab: TabType) => {
     dispatch({ type: 'SET_TAB', payload: tab });
   };
 
   if (showLanding) {
-    return <LandingPage onStart={() => setShowLanding(false)} />;
+    return <LandingPage onStart={handleStartDemo} />;
   }
 
   const renderTab = () => {
@@ -51,6 +58,7 @@ function App() {
 
   return (
     <div className="h-screen flex flex-col bg-navy-950">
+      {showGuide && <GuideTour onClose={() => setShowGuide(false)} />}
       <Header />
       <WorkflowStepper activeTab={state.activeTab} state={state} onStepClick={handleTabChange} />
       <TabBar activeTab={state.activeTab} onTabChange={handleTabChange} />
