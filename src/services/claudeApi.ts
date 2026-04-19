@@ -56,6 +56,9 @@ async function callDirect(prompt: string): Promise<string> {
       'Content-Type': 'application/json',
       'x-api-key': apiKey,
       'anthropic-version': '2023-06-01',
+      // DEMO ONLY: 로컬 개발 환경에서만 사용. 프로덕션에서는 callViaProxy()를 통해
+      // 서버 사이드에서 API를 호출하므로 이 헤더와 API 키가 브라우저에 노출되지 않음.
+      // 실제 방산 환경에서는 온프레미스 LLM 배포 + 사내망 전용 API로 대체.
       'anthropic-dangerous-direct-browser-access': 'true',
     },
     body: JSON.stringify({
