@@ -10,6 +10,7 @@ import { CodeGenerator } from './components/CodeGen/CodeGenerator';
 import { TestGenerator } from './components/TestGen/TestGenerator';
 import { ReportGenerator } from './components/Report/ReportGenerator';
 import { KnowledgeSearch } from './components/Knowledge/KnowledgeSearch';
+import { MisraCChecker } from './components/Compliance/MisraCChecker';
 import { ErrorBoundary } from './components/UI/ErrorBoundary';
 import { useAppState } from './hooks/useAppState';
 import type { TabType } from './types';
@@ -39,6 +40,8 @@ function App() {
         return <TestGenerator selectedECO={state.selectedECO} generatedCode={state.generatedCode} generatedTests={state.generatedTests} isLoading={state.isLoading} selectedModuleId={state.selectedModuleId} dispatch={dispatch} />;
       case 'report':
         return <ReportGenerator selectedECO={state.selectedECO} analysisResult={state.analysisResult} generatedCode={state.generatedCode} generatedTests={state.generatedTests} generatedReport={state.generatedReport} isLoading={state.isLoading} dispatch={dispatch} />;
+      case 'compliance':
+        return <MisraCChecker selectedECO={state.selectedECO} generatedCode={state.generatedCode} selectedModuleId={state.selectedModuleId} dispatch={dispatch} />;
       case 'knowledge':
         return <KnowledgeSearch />;
       default:

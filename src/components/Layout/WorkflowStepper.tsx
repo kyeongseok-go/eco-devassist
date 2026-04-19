@@ -19,7 +19,8 @@ const steps: Step[] = [
   { id: 'codegen', label: '코드 생성', shortLabel: '3' },
   { id: 'testgen', label: '테스트', shortLabel: '4' },
   { id: 'report', label: '보고서', shortLabel: '5' },
-  { id: 'knowledge', label: '지식 검색', shortLabel: '6' },
+  { id: 'compliance', label: '규격 검증', shortLabel: '6' },
+  { id: 'knowledge', label: '지식 검색', shortLabel: '7' },
 ];
 
 function isStepCompleted(stepId: TabType, state: AppState): boolean {

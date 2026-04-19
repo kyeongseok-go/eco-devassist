@@ -81,7 +81,7 @@ export interface TestCase {
   priority: 'High' | 'Medium' | 'Low';
 }
 
-export type TabType = 'dashboard' | 'analysis' | 'codegen' | 'testgen' | 'report' | 'knowledge';
+export type TabType = 'dashboard' | 'analysis' | 'codegen' | 'testgen' | 'report' | 'knowledge' | 'compliance';
 
 export interface AppState {
   ecos: ECO[];

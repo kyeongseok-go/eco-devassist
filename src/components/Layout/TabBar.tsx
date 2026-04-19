@@ -1,4 +1,4 @@
-import { LayoutDashboard, Search, Code2, TestTube2, FileText, BookOpen } from 'lucide-react';
+import { LayoutDashboard, Search, Code2, TestTube2, FileText, BookOpen, ShieldCheck } from 'lucide-react';
 import type { TabType } from '../../types';
 
 interface TabBarProps {
@@ -13,6 +13,7 @@ const tabs: { id: TabType; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'testgen', label: '테스트 생성', icon: TestTube2 },
   { id: 'report', label: '보고서', icon: FileText },
   { id: 'knowledge', label: '지식 검색', icon: BookOpen },
+  { id: 'compliance', label: 'MISRA-C 검증', icon: ShieldCheck },
 ];
 
 export function TabBar({ activeTab, onTabChange }: TabBarProps) {

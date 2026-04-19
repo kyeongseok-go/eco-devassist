@@ -184,3 +184,41 @@ ${question}
 
 답변은 실용적이고 구체적으로 작성하세요.`;
 }
+
+export function buildMisraCPrompt(code: string, moduleName: string): string {
+  return `당신은 방산 임베디드 SW 코딩 규격 전문가입니다.
+MISRA-C:2012, DO-178C, MIL-STD-498 규격에 정통합니다.
+
+[검증 대상 코드 — ${moduleName}]
+\`\`\`c
+${code}
+\`\`\`
+
+위 코드를 다음 방산 코딩 규격 기준으로 검증해주세요:
+
+1. **MISRA-C:2012** — 필수(Required) 및 권고(Advisory) 규칙 위반
+2. **방어적 프로그래밍** — 널 포인터 검사, 경계값 검증, 오버플로우 방지
+3. **안전 관련** — 안전 임계 코드(Safety-Critical)에서의 위험 패턴
+4. **코드 품질** — 매직 넘버, 미사용 변수, 복잡도 등
+
+반드시 다음 JSON 형식으로만 응답해주세요:
+{
+  "violations": [
+    {
+      "ruleId": "MISRA-C:2012 Rule X.X 또는 자체 규칙 ID",
+      "severity": "Required|Advisory|Safety",
+      "line": "해당 라인 또는 패턴",
+      "description": "위반 내용 설명",
+      "recommendation": "수정 방법"
+    }
+  ],
+  "summary": {
+    "totalViolations": 0,
+    "required": 0,
+    "advisory": 0,
+    "safety": 0,
+    "complianceScore": "0-100점"
+  },
+  "overallAssessment": "전체 평가 코멘트"
+}`;
+}
