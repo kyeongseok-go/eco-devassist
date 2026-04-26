@@ -1,31 +1,55 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy-950: #0a0e1a;
-  --color-navy-900: #0f1629;
-  --color-navy-800: #162040;
-  --color-navy-700: #1e2d5a;
-  --color-navy-600: #2a3f7a;
-  --color-navy-500: #3a5599;
-  --color-accent-green: #00e676;
-  --color-accent-green-dim: #00c853;
-  --color-accent-cyan: #00bcd4;
-  --color-status-critical: #ff1744;
-  --color-status-high: #ff9100;
-  --color-status-medium: #ffd600;
-  --color-status-low: #00e676;
-  --color-status-draft: #78909c;
-  --color-status-review: #ffd600;
-  --color-status-approved: #448aff;
-  --color-status-inprogress: #ff9100;
-  --color-status-completed: #00e676;
+  --font-display: 'General Sans', 'Poppins', 'Inter', sans-serif;
+  --font-serif: 'Source Serif 4', 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --color-space-950: #050608;
+  --color-space-900: #0a0c10;
+  --color-space-800: #11141a;
+  --color-space-700: #1a1e26;
+  --color-space-600: #262b36;
+  --color-space-500: #3a4150;
+  --color-space-400: #5a6373;
+  --color-space-300: #8a93a4;
+
+  --color-hanwha-500: #ed7100;
+  --color-hanwha-600: #d05f00;
+  --color-hanwha-400: #ff8a2a;
+  --color-hanwha-300: #ffaa66;
+  --color-hanwha-200: #ffd1a8;
+  --color-hanwha-100: #ffe9d4;
+  --color-hanwha-glow: #ed7100;
+
+  --color-navy-950: #050608;
+  --color-navy-900: #0a0c10;
+  --color-navy-800: #11141a;
+  --color-navy-700: #1a1e26;
+  --color-navy-600: #262b36;
+  --color-navy-500: #5a6373;
+
+  --color-accent-green: #ed7100;
+  --color-accent-green-dim: #d05f00;
+  --color-accent-cyan: #ff8a2a;
+  --color-status-critical: #ff3838;
+  --color-status-high: #ed7100;
+  --color-status-medium: #ffb547;
+  --color-status-low: #4ade80;
+  --color-status-draft: #5a6373;
+  --color-status-review: #ffb547;
+  --color-status-approved: #ed7100;
+  --color-status-inprogress: #ff8a2a;
+  --color-status-completed: #4ade80;
 }
 
 body {
   margin: 0;
-  background-color: var(--color-navy-950);
-  color: #e0e0ee;
+  background-color: var(--color-space-950);
+  color: #d8dde6;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::-webkit-scrollbar {
@@ -33,9 +57,178 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-navy-900);
+  background: var(--color-space-900);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-navy-600);
+  background: var(--color-space-600);
   border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-hanwha-600);
+}
+
+@layer components {
+  /* 우주/방산 그리드 배경 */
+  .bg-space-grid {
+    background-color: var(--color-space-950);
+    background-image:
+      linear-gradient(rgba(237, 113, 0, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(237, 113, 0, 0.04) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  /* 별빛/우주 노이즈 */
+  .bg-space-stars {
+    background-color: var(--color-space-950);
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.5), transparent),
+      radial-gradient(1px 1px at 70% 60%, rgba(255, 255, 255, 0.4), transparent),
+      radial-gradient(1px 1px at 40% 80%, rgba(255, 255, 255, 0.3), transparent),
+      radial-gradient(2px 2px at 85% 20%, rgba(237, 113, 0, 0.5), transparent),
+      radial-gradient(1px 1px at 15% 70%, rgba(237, 113, 0, 0.3), transparent);
+    background-size: 800px 800px;
+  }
+
+  /* 한화 시그니처 글로우 */
+  .glow-hanwha {
+    box-shadow:
+      0 0 24px rgba(237, 113, 0, 0.35),
+      0 0 60px rgba(237, 113, 0, 0.18);
+  }
+
+  /* Liquid Glass - 라이트 (네비/배지/필) */
+  .liquid-glass {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: none;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  }
+  .liquid-glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.35) 0%,
+      rgba(255, 255, 255, 0.08) 25%,
+      transparent 50%,
+      rgba(237, 113, 0, 0.15) 80%,
+      rgba(237, 113, 0, 0.4) 100%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Liquid Glass - 강 (CTA, 패널) */
+  .liquid-glass-strong {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: none;
+    box-shadow:
+      4px 4px 20px rgba(0, 0, 0, 0.4),
+      inset 0 1px 1px rgba(255, 255, 255, 0.12);
+  }
+  .liquid-glass-strong::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.18) 22%,
+      transparent 50%,
+      rgba(237, 113, 0, 0.22) 78%,
+      rgba(237, 113, 0, 0.55) 100%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* CTA 핵심 버튼 - 한화 오렌지 */
+  .btn-hanwha {
+    background: linear-gradient(180deg, #ff8a2a 0%, #ed7100 50%, #d05f00 100%);
+    color: #0a0c10;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.4) inset,
+      0 -1px 0 rgba(0, 0, 0, 0.25) inset,
+      0 8px 24px rgba(237, 113, 0, 0.35);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+  .btn-hanwha:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.5) inset,
+      0 -1px 0 rgba(0, 0, 0, 0.25) inset,
+      0 12px 32px rgba(237, 113, 0, 0.5);
+  }
+  .btn-hanwha:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* 텍스트 그라데이션 (히어로) */
+  .text-gradient-hero {
+    background-image: linear-gradient(144.5deg, #ffffff 0%, #ffffff 28%, rgba(255, 255, 255, 0) 115%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+            color: transparent;
+  }
+
+  .text-gradient-hanwha {
+    background-image: linear-gradient(135deg, #ffaa66 0%, #ed7100 50%, #ff8a2a 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+            color: transparent;
+  }
+
+  /* 스캔 라인 (방산 HUD 느낌) */
+  .scan-line::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ed7100 50%, transparent);
+    box-shadow: 0 0 12px #ed7100;
+    animation: scan 4s linear infinite;
+  }
+  @keyframes scan {
+    0% { transform: translateY(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(60vh); opacity: 0; }
+  }
+
+  /* 한화 시그니처 라인(점선 표시) */
+  .hanwha-rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(237, 113, 0, 0.6), transparent);
+  }
+
+  /* 펄스 도트 */
+  .pulse-dot {
+    width: 6px; height: 6px; border-radius: 9999px;
+    background: #ed7100;
+    box-shadow: 0 0 0 0 rgba(237, 113, 0, 0.6);
+    animation: pulse-orange 1.8s ease-out infinite;
+  }
+  @keyframes pulse-orange {
+    0%   { box-shadow: 0 0 0 0 rgba(237, 113, 0, 0.6); }
+    70%  { box-shadow: 0 0 0 12px rgba(237, 113, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(237, 113, 0, 0); }
+  }
 }
